@@ -1,0 +1,6 @@
+@SimonMondjaSecondTask_HostAddress = http://localhost:5201
+
+GET {{SimonMondjaSecondTask_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
