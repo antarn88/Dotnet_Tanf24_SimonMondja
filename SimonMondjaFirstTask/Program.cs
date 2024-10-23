@@ -12,36 +12,39 @@ namespace SimonMondjaFirstTask
 
             var app = builder.Build();
 
-            app.MapGet("/guess", (ISimonMondjaService simonMondjaService) =>
+            app.MapGet("/guess", (HttpContext context) =>
             {
-                int randomNumber = simonMondjaService.NewGame();
+                var simonMondjaService = context.RequestServices.GetService<ISimonMondjaService>();
+                int randomNumber = simonMondjaService!.NewGame();
+
                 return Results.Ok(randomNumber);
             });
 
-            app.MapGet("/guess/{givenNumber:int}", (int givenNumber, ISimonMondjaService simonMondjaService) =>
+            app.MapGet("/guess/{givenNumber:int}", (HttpContext context, int givenNumber) =>
             {
-                var (success, nextNumber) = simonMondjaService.Guess(givenNumber);
+                var simonMondjaService = context.RequestServices.GetService<ISimonMondjaService>();
+                var (success, nextNumber) = simonMondjaService!.Guess(givenNumber);
 
                 if (success)
                 {
                     if (nextNumber.HasValue)
                     {
-                        return Results.Ok($"Great! The next number is {nextNumber}.");
+                        return Results.Text($"Great! The next number is {nextNumber}.");
                     }
                     else
                     {
-                        return Results.Ok($"Number {simonMondjaService.CorrectGuesses} is correct!");
+                        return Results.Text($"Number {simonMondjaService.CorrectGuesses} is correct!");
                     }
                 }
                 else
                 {
                     if (nextNumber.HasValue)
                     {
-                        return Results.Ok($"Oh no! The correct number was {nextNumber}.");
+                        return Results.Text($"Oh no! The correct number was {nextNumber}.");
                     }
                     else
                     {
-                        return Results.Ok("Oh no! The game has been reset.");
+                        return Results.Text("Oh no! The game has been reset.");
                     }
                 }
             });
