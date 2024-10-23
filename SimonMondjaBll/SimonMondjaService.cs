@@ -34,11 +34,13 @@
                 {
                     int nextNumber = Random.Next(1, 99);
                     Numbers.Add(nextNumber);
-                    CorrectGuesses = 0;
+                    clearCorrectGuesses();
+
                     return (true, nextNumber);
                 }
 
-                CorrectGuesses++;
+                increaseCorrectGuesses();
+
                 return (true, null);
             }
             else
@@ -47,7 +49,8 @@
                 {
                     int correctNextNumber = Numbers[CorrectGuesses];
                     Numbers.Clear();
-                    CorrectGuesses = 0;
+                    clearCorrectGuesses();
+
                     return (false, correctNextNumber);
                 }
                 else
